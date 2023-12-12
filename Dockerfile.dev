@@ -1,0 +1,8 @@
+# Dockerfile.dev
+FROM python:3.10
+ENV PYTHONUNBUFFERED=1
+ENV DOCKER_DEFAULT_PLATFORM=linux/amd64
+WORKDIR /mydjangoappnewaws
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+
