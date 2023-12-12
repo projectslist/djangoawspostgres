@@ -1,0 +1,27 @@
+# Use a lightweight base image
+FROM python:3.8-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Create and set working directory
+WORKDIR /code
+
+# Install system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt /code/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . /code/
+
+# Collect static files (if applicable)
+# RUN python manage.py collectstatic --noinput
+
+# Run application
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "your_app_name.wsgi:application"]
